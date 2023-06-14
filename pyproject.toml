@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "jobs parser"
+version = "0.1.0"
+description = ""
+authors = ["Denis <denis30510@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pytest = "^7.3.2"
+requests = "^2.31.0"
+coverage = "^7.2.7"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
