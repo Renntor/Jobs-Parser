@@ -219,6 +219,17 @@ files = [
 ]
 
 [[package]]
+name = "pickle-mixin"
+version = "1.0.2"
+description = "Makes un-pickle-able objects pick-able."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pickle-mixin-1.0.2.tar.gz", hash = "sha256:d4983cd09939f6e402c69ba4f4200f2e6ccdfd39c020f6d1091290d78f17625c"},
+]
+
+[[package]]
 name = "pluggy"
 version = "1.0.0"
 description = "plugin and hook calling mechanisms for python"
@@ -298,4 +309,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "442c393826b6b06aa17889aa20565c1c49ddf0e5bd29277c160b4609794b44fa"
+content-hash = "16c9a1087d7300f922797a1b7409ae538babd304cc1a5b655fc5b84a840f5072"

@@ -18,9 +18,8 @@ class HhApi(Job):
         self.name = name
         self.__params = {
             'text': 'NAME:'+self.name,  # Поиска вакансии по имени
-            'area': 1,  # Поиск по городам
             'page': 0,  # Страница в HH
-            'per_page': 8  # Количество вакансий на 1 странице
+            'per_page': 100,  # Количество вакансий на 1 странице
         }
 
     def get_vacancies(self) -> dict:
@@ -59,5 +58,4 @@ class SuperJobApi(Job):
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}('{self.name}')"
-
 
