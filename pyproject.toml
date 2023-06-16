@@ -10,7 +10,7 @@ python = "^3.11"
 pytest = "^7.3.2"
 requests = "^2.31.0"
 coverage = "^7.2.7"
-pickle-mixin = "^1.0.2"
+ujson = "^5.8.0"
 
 
 [build-system]

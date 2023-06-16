@@ -8,9 +8,9 @@ class Vacancy:
         self.name = name
         self.salary = salary
         self.experience = experience
+        self.address = address
         self.employment = employment
         self.city = city
-        self.address = address
         self.url = url
         self.requirement = requirement
 
