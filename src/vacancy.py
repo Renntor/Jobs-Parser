@@ -5,56 +5,59 @@ class Vacancy:
     """
     def __init__(self, name: str, salary: int, experience: str,
                  address: str, employment: str, city: str, url: str, requirement: str) -> None:
-        self.name = name
-        self.salary = salary
-        self.experience = experience
-        self.address = address
-        self.employment = employment
-        self.city = city
-        self.url = url
-        self.requirement = requirement
+        self.__name = name
+        self.__salary = salary
+        self.__experience = experience
+        self.__address = address
+        self.__employment = employment
+        self.__city = city
+        self.__url = url
+        self.__requirement = requirement
+
+    @property
+    def salary(self):
+        return self.__salary
 
     def __gt__(self, other):
-        if self.salary is None:
-            return 'У первой вакансии не установлена зарплата'
-        if other.salary is None:
-            return 'У второй вакансии не установлена зарплата'
-        return self.salary > other.salary
+        if self.__salary is None:
+            return 'У первой вакансии не указана зарплата'
+        if other.__salary is None:
+            return 'У второй вакансии не указана зарплата'
+        return self.__salary > other.__salary
 
     def __ge__(self, other):
-        if self.salary is None:
-            return 'У первой вакансии не установлена зарплата'
-        if other.salary is None:
-            return 'У второй вакансии не установлена зарплата'
-        return self.salary >= other.salary
+        if self.__salary is None:
+            return 'У первой вакансии не указана зарплата'
+        if other.__salary is None:
+            return 'У второй вакансии не указана зарплата'
+        return self.__salary >= other.__salary
 
     def __lt__(self, other):
-        if self.salary is None:
-            return 'У первой вакансии не установлена зарплата'
-        if other.salary is None:
-            return 'У второй вакансии не установлена зарплата'
-        return self.salary < other.salary
+        if self.__salary is None:
+            return 'У первой вакансии не указана зарплата'
+        if other.__salary is None:
+            return 'У второй вакансии не указана зарплата'
+        return self.__salary < other.__salary
 
     def __le__(self, other):
-        if self.salary is None:
-            return 'У первой вакансии не установлена зарплата'
-        if other.salary is None:
-            return 'У второй вакансии не установлена зарплата'
-        return self.salary <= other.salary
+        if self.__salary is None:
+            return 'У первой вакансии не указана зарплата'
+        if other.__salary is None:
+            return 'У второй вакансии не указана зарплата'
+        return self.__salary <= other.__salary
 
     def __eq__(self, other):
-        if self.salary is None:
-            return 'У первой вакансии не установлена зарплата'
-        if other.salary is None:
-            return 'У второй вакансии не установлена зарплата'
-        return self.salary == other.salary
+        if self.__salary is None:
+            return 'У первой вакансии не указана зарплата'
+        if other.__salary is None:
+            return 'У второй вакансии не указана зарплата'
+        return self.__salary == other.__salary
 
     def __str__(self):
-        return f'{self.name}, {self.salary}, {self.experience}, {self.employment}, \
-{self.city}, {self.address}, {self.url}, {self.requirement}'
+        return f'{self.__name}, {self.__salary}, {self.__experience}, {self.__address}, {self.__employment}, \
+{self.__city}, {self.__url}, {self.__requirement}'
 
     def __repr__(self):
-        return f"{self.__class__.__name__}('{self.name}', {self.salary}, \
-'{self.experience}', '{self.employment}', '{self.city}', '{self.address}', '{self.url}', '{self.requirement}')"
-
+        return f"{self.__class__.__name__}('{self.__name}', {self.__salary}, \
+'{self.__experience}', '{self.__address}', '{self.__employment}', '{self.__city}', '{self.__url}', '{self.__requirement}')"
 

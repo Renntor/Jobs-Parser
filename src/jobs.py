@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-import requests
-import json
+import httpx
+import ujson
 
 
 class Job(ABC):
@@ -27,9 +27,9 @@ class HhApi(Job):
         Функция для получения данных по заданной вакансии
         :return: список вакансий в формате json
         """
-        hh_request = requests.get('https://api.hh.ru/vacancies', params=self.__params)
+        hh_request = httpx.get('https://api.hh.ru/vacancies', params=self.__params)
         date_hh = hh_request.content.decode()
-        hh_json = json.loads(date_hh)
+        hh_json = ujson.loads(date_hh)
         return hh_json
 
     def __str__(self) -> str:
@@ -59,3 +59,6 @@ class SuperJobApi(Job):
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}('{self.name}')"
 
+# i = HhApi('Python')
+# with open('i.json', 'w', encoding="utf-8") as f:
+#     ujson.dump(i.get_vacancies(), f, indent=2, ensure_ascii=False, escape_forward_slashes=False)

@@ -1,8 +1,8 @@
-import ujson
-import os
 import csv
+import os
+import pickle
+import ujson
 from abc import ABC, abstractmethod
-from src.vacancy import Vacancy
 
 
 class Saver(ABC):
@@ -33,7 +33,6 @@ class Saver(ABC):
 
 
 class JsonSaver(Saver):
-
     file = os.path.join('..', 'src', 'vacancy.json')
 
     def jobs_adding(self, jobs: dict) -> None:
@@ -60,8 +59,8 @@ class JsonSaver(Saver):
         """
         with open(self.file, 'r', encoding="utf-8") as f:
             ujson_data = ujson.load(f)
-            return [ujson_data[item] for item in range(len(ujson_data)) if ujson_data[item]['salary'] == salary]
-
+            return [ujson_data[item] for item in range(len(ujson_data)) if
+                    ujson_data[item]['_Vacancy__salary'] == salary]
 
     def get_city(self, city: str) -> list:
         """
@@ -71,7 +70,7 @@ class JsonSaver(Saver):
         """
         with open(self.file, 'r', encoding="utf-8") as f:
             ujson_data = ujson.load(f)
-            return [ujson_data[item] for item in range(len(ujson_data)) if ujson_data[item]['city'] == city]
+            return [ujson_data[item] for item in range(len(ujson_data)) if ujson_data[item]['_Vacancy__city'] == city]
 
     def get_experience(self, experience: str) -> list:
         """
@@ -81,7 +80,8 @@ class JsonSaver(Saver):
         """
         with open(self.file, 'r', encoding="utf-8") as f:
             ujson_data = ujson.load(f)
-            return [ujson_data[item] for item in range(len(ujson_data)) if ujson_data[item]['experience'] == experience]
+            return [ujson_data[item] for item in range(len(ujson_data)) if
+                    ujson_data[item]['_Vacancy__experience'] == experience]
 
     def jobs_deleting(self, jobs: dict) -> None:
         """
@@ -89,13 +89,13 @@ class JsonSaver(Saver):
         :param jobs: словарь вакансии
         :return: None
         """
-        ujson_data = ujson.load(open(self.file))
-        ujson_data.remove(jobs)
         try:
+            ujson_data = ujson.load(open(self.file))
+            ujson_data.remove(jobs)
             with open(self.file, 'w', encoding="utf-8") as f:
                 ujson.dump(ujson_data, f, indent=2, ensure_ascii=False, escape_forward_slashes=False)
         except ValueError:
-            pass
+            print('Все вакансии удалены')
 
     def file_cleaning(self) -> None:
         """
@@ -106,7 +106,6 @@ class JsonSaver(Saver):
 
 
 class CSVSaver(Saver):
-
     file = os.path.join('..', 'src', 'vacancy.csv')
 
     def jobs_adding(self, jobs: dict) -> None:
@@ -132,7 +131,7 @@ class CSVSaver(Saver):
         :return: Список подходящих вакансий
         """
         with open(self.file, 'r', encoding='utf-8') as f:
-            return [item for item in csv.DictReader(f) if int(item['salary']) == salary]
+            return [item for item in csv.DictReader(f) if int(item['_Vacancy__salary']) == salary]
 
     def get_city(self, city: str) -> list:
         """
@@ -141,7 +140,7 @@ class CSVSaver(Saver):
         :return: Список подходящих вакансий
         """
         with open(self.file, 'r', encoding='utf-8') as f:
-            return [item for item in csv.DictReader(f) if item['city'] == city]
+            return [item for item in csv.DictReader(f) if item['_Vacancy__city'] == city]
 
     def get_experience(self, experience: str) -> list:
         """
@@ -150,7 +149,7 @@ class CSVSaver(Saver):
         :return: Список подходящих вакансий
         """
         with open(self.file, 'r', encoding='utf-8') as f:
-            return [item for item in csv.DictReader(f) if item['experience'] == experience]
+            return [item for item in csv.DictReader(f) if item['_Vacancy__experience'] == experience]
 
     def jobs_deleting(self, jobs: dict) -> None:
         """
@@ -158,16 +157,18 @@ class CSVSaver(Saver):
         :param jobs: словарь вакансии
         :return: None
         """
-        file = open(self.file)
-        file_csv = csv.DictReader(file)
-        jobs_list = [item for item in file_csv if item != jobs]
-        with open(self.file, 'w', encoding='utf-8') as f:
-            write = csv.DictWriter(f, fieldnames=jobs_list[0].keys(), quoting=csv.QUOTE_NONNUMERIC)
-            write.writeheader()
-            for item in jobs_list:
-                write = csv.DictWriter(f, fieldnames=item.keys(), quoting=csv.QUOTE_NONNUMERIC)
-                write.writerow(item)
-
+        try:
+            file = open(self.file)
+            file_csv = csv.DictReader(file)
+            jobs_list = [item for item in file_csv if item != jobs]
+            with open(self.file, 'w', encoding='utf-8') as f:
+                write = csv.DictWriter(f, fieldnames=jobs_list[0].keys(), quoting=csv.QUOTE_NONNUMERIC)
+                write.writeheader()
+                for item in jobs_list:
+                    write = csv.DictWriter(f, fieldnames=item.keys(), quoting=csv.QUOTE_NONNUMERIC)
+                    write.writerow(item)
+        except IndexError:
+            print('Все вакансии удалены')
 
     def file_cleaning(self) -> None:
         """
@@ -178,50 +179,70 @@ class CSVSaver(Saver):
 
 
 class TXTSaver(Saver):
-
     file = os.path.join('..', 'src', 'vacancy.txt')
 
-    def jobs_adding(self, jobs):
+    def jobs_adding(self, jobs: dict) -> None:
         """
         Метод добавление данных в формате json
         :param jobs: словарь, который добавляется в файл
         :return: None
         """
+        # проверка на существование файла
         if os.path.exists(self.file) is False:
-            with open(self.file, 'w', encoding='utf-8') as f:
-                pass
+            with open(self.file, 'wb') as f:
+                pickle.dump([], f)
+        # добавление в список вакансию
+        with open(self.file, 'rb') as f:
+            file = pickle.load(f, encoding='utf-8')
+            file.append(jobs)
+        # запись в файл
+        with open(self.file, 'wb') as f:
+            pickle.dump(file, f)
 
-    def get_salary(self, salary):
+    def get_salary(self, salary: int) -> list:
         """
         Метод на проверку зарплаты
         :param salary: запралата
         :return: Список подходящих вакансий
         """
-        pass
+        with open(self.file, 'rb') as f:
+            txt_date = pickle.load(f, encoding='utf-8')
+            return [item for item in txt_date if int(item['_Vacancy__salary']) == salary]
 
-    def get_city(self, city):
+    def get_city(self, city: str) -> list:
         """
         Метод на проверку города
         :param city: город
         :return: Список подходящих вакансий
         """
-        pass
+        with open(self.file, 'rb') as f:
+            txt_date = pickle.load(f, encoding='utf-8')
+            return [item for item in txt_date if item['_Vacancy__city'] == city]
 
-    def get_experience(self, experience):
+    def get_experience(self, experience: str) -> list:
         """
         Метод на проверку опыта работы
         :param experience: опыт работы
         :return: Список подходящих вакансий
         """
-        pass
+        with open(self.file, 'rb') as f:
+            txt_date = pickle.load(f, encoding='utf-8')
+            return [item for item in txt_date if item['_Vacancy__experience'] == experience]
 
-    def jobs_deleting(self, jobs):
+    def jobs_deleting(self, jobs: dict) -> None:
         """
         Метод на удаление выбранной вакансии
         :param jobs: словарь вакансии
         :return: None
         """
-        pass
+        try:
+            with open(self.file, 'rb') as f:
+                txt_date = pickle.load(f, encoding='utf-8')
+                txt_date.remove(jobs)
+            with open(self.file, 'wb') as f:
+                pickle.dump(txt_date, f)
+        except ValueError:
+            print('Все вакансии удалены')
 
     def file_cleaning(self) -> None:
         """
@@ -229,18 +250,3 @@ class TXTSaver(Saver):
         :return: None
         """
         os.remove(self.file)
-
-
-
-# vacancy = Vacancy('Python', 100000, '1 год', 'г. Снежный, ул. Теплая, д. 6', 'https://ya.ru', 'Живой', 'gfd', 'gd')
-# u = JsonSaver()
-# u.jobs_adding(vacancy.__dict__)
-# u.jobs_adding(vacancy.__dict__)
-# vacancy.salary = 5
-# u.jobs_deleting(vacancy.__dict__)
-
-# i = CSVSaver()
-# #i.jobs_adding(vacancy.__dict__)
-# p = i.get_salary(5)[0]
-# i.jobs_deleting(p)
-# # print(i.jobs_deleting(1))

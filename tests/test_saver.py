@@ -1,5 +1,5 @@
-import pytest
 import os
+import pytest
 from src.saver import JsonSaver, TXTSaver, CSVSaver
 from src.vacancy import Vacancy
 
@@ -7,6 +7,7 @@ from src.vacancy import Vacancy
 @pytest.fixture
 def vacancy_date():
     return Vacancy('Python', 1000, '1 year', 'city M, st. K', 'full', 'M', 'https://how.su', 'sleeping')
+
 
 def test_JsonSaver(vacancy_date):
     saver = JsonSaver()
@@ -18,10 +19,10 @@ def test_JsonSaver(vacancy_date):
     vacancy_date.salary = 5
     saver.jobs_adding(vacancy_date.__dict__)
 
-    vacancy_date.city = 'G'
+    vacancy_date.__city = 'G'
     saver.jobs_adding(vacancy_date.__dict__)
 
-    vacancy_date.experience = '2 year'
+    vacancy_date.__experience = '2 year'
     saver.jobs_adding(vacancy_date.__dict__)
 
     assert len(saver.get_salary(5)) == 3
@@ -34,6 +35,11 @@ def test_JsonSaver(vacancy_date):
 
     saver.file_cleaning()
     assert os.path.exists(saver.file) is False
+    saver.jobs_adding({})
+    saver.jobs_deleting({})
+    saver.jobs_deleting({})
+    saver.file_cleaning()
+
 
 def test_CSVSaver(vacancy_date):
     saver = CSVSaver()
@@ -45,10 +51,10 @@ def test_CSVSaver(vacancy_date):
     vacancy_date.salary = 5
     saver.jobs_adding(vacancy_date.__dict__)
 
-    vacancy_date.city = 'G'
+    vacancy_date.__city = 'G'
     saver.jobs_adding(vacancy_date.__dict__)
 
-    vacancy_date.experience = '2 year'
+    vacancy_date.__experience = '2 year'
     saver.jobs_adding(vacancy_date.__dict__)
 
     assert len(saver.get_salary(5)) == 3
@@ -61,6 +67,11 @@ def test_CSVSaver(vacancy_date):
 
     saver.file_cleaning()
     assert os.path.exists(saver.file) is False
+    saver.jobs_adding({})
+    saver.jobs_deleting({})
+    saver.jobs_deleting({})
+    saver.file_cleaning()
+
 
 def test_TXTSaver(vacancy_date):
     saver = TXTSaver()
@@ -72,10 +83,10 @@ def test_TXTSaver(vacancy_date):
     vacancy_date.salary = 5
     saver.jobs_adding(vacancy_date.__dict__)
 
-    vacancy_date.city = 'G'
+    vacancy_date.__city = 'G'
     saver.jobs_adding(vacancy_date.__dict__)
 
-    vacancy_date.experience = '2 year'
+    vacancy_date.__experience = '2 year'
     saver.jobs_adding(vacancy_date.__dict__)
 
     assert len(saver.get_salary(5)) == 3
@@ -88,3 +99,7 @@ def test_TXTSaver(vacancy_date):
 
     saver.file_cleaning()
     assert os.path.exists(saver.file) is False
+    saver.jobs_adding({})
+    saver.jobs_deleting({})
+    saver.jobs_deleting({})
+    saver.file_cleaning()
