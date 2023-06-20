@@ -10,6 +10,8 @@ python = "^3.11"
 pytest = "^7.3.2"
 requests = "^2.31.0"
 coverage = "^7.2.7"
+ujson = "^5.8.0"
+httpx = "^0.24.1"
 
 
 [build-system]
