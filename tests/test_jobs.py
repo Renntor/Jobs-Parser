@@ -20,5 +20,5 @@ def test_HhApi(hh_date):
 
 def test_SuperJobApi(supj_date):
     assert str(supj_date) == 'Java'
-    assert repr(supj_date) == "HhApi('Java')"
+    assert repr(supj_date) == "SuperJobApi('Java')"
     assert type(supj_date.get_vacancies()) == dict
